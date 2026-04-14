@@ -310,7 +310,9 @@ if results:
             format_func=lambda x: topic_options[x])
     with fc3:
         search_filter = st.text_input("Search", placeholder="Filter by title, author, journal…")
-
+# Journal filter
+        all_journals = sorted(set(p["journal"] for p in results if p.get("journal")))
+        journal_filter = st.multiselect("Filter by journal", all_journals, default=[])
     sc1, sc2 = st.columns([1, 4])
     with sc1:
         sort_by = st.selectbox("Sort by", ["date_desc","date_asc","journal"],
@@ -320,6 +322,8 @@ if results:
     filtered = [p for p in results
                 if pf._get_tier(p["tag"]) in tier_filter
                 and get_topic_key(p["tag"]) in topic_filter]
+    if journal_filter:
+        filtered = [p for p in filtered if p.get("journal") in journal_filter]
     if search_filter:
         q = search_filter.lower()
         filtered = [p for p in filtered
