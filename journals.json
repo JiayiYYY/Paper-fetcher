@@ -1,0 +1,84 @@
+{
+  "_comment": "期刊白名单供未来过滤使用。tier1 为你指定的核心期刊，tier2 为跨学科扩展。",
+
+  "tier1_your_journals": [
+    "Computers in Human Behavior",
+    "Nature",
+    "Media Psychology",
+    "Communication Monographs",
+    "Feminist Media Studies",
+    "Information Communication and Society",
+    "Journal of Children and Media"
+  ],
+
+  "tier2_recommended": {
+    "_comment": "按领域分组，便于理解扩展逻辑",
+
+    "communication_core": [
+      "Journal of Communication",
+      "Human Communication Research",
+      "Communication Research",
+      "Journal of Computer-Mediated Communication",
+      "Mass Communication and Society",
+      "New Media and Society",
+      "Social Media and Society",
+      "Communication Methods and Measures",
+      "Political Communication",
+      "Journalism and Mass Communication Quarterly"
+    ],
+
+    "media_psychology": [
+      "Psychology of Popular Media",
+      "Cyberpsychology Behavior and Social Networking",
+      "Journal of Media Psychology",
+      "Cyberpsychology Journal of Psychosocial Research on Cyberspace"
+    ],
+
+    "youth_development": [
+      "Journal of Youth and Adolescence",
+      "Developmental Psychology",
+      "Journal of Adolescence",
+      "Pediatrics",
+      "Journal of Adolescent Health",
+      "Child Development",
+      "Journal of Child Psychology and Psychiatry"
+    ],
+
+    "gender_feminist": [
+      "Gender and Society",
+      "Sex Roles",
+      "Psychology of Women Quarterly",
+      "Gender and Language",
+      "Women's Studies in Communication"
+    ],
+
+    "political_psychology": [
+      "Political Psychology",
+      "Political Communication",
+      "Public Opinion Quarterly",
+      "Journal of Experimental Political Science",
+      "American Journal of Political Science"
+    ],
+
+    "interdisciplinary_crossover": [
+      "PNAS",
+      "Nature Human Behaviour",
+      "Science Advances",
+      "Big Data and Society",
+      "Social Science and Medicine",
+      "Journal of Health Communication",
+      "Perspectives on Psychological Science",
+      "Psychological Science",
+      "Evolution and Human Behavior",
+      "Evolutionary Psychology"
+    ],
+
+    "ai_critical": [
+      "AI and Society",
+      "Big Data and Society",
+      "Social Studies of Science",
+      "Science Technology and Human Values",
+      "Information Society"
+    ]
+  }
+}

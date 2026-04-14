@@ -1,0 +1,39 @@
+{
+ "semantic_scholar": {
+    "api_key": ""
+ },
+
+  "zotero": {
+    "_comment_library_id": "Find this at zotero.org/settings/keys — shown as 'Your userID for use in API calls'",
+    "library_id": "",
+
+    "_comment_api_key": "Generate at zotero.org/settings/keys → Create new private key",
+    "api_key": "",
+
+    "_comment_library_type": "'user' for personal library, 'group' for group library",
+    "library_type": "user",
+
+    "_comment_collection_key": "Optional. The 8-char key from a Zotero collection URL. Leave empty to save to root.",
+    "collection_keys": {
+      "tier1:ai_fairness_decolonial": "",
+      "tier1:sexual_behavior_youth": "",
+      "tier1:social_media_wellbeing": "",
+      "tier1:gender_studies": "",
+      "tier1:entertainment_youth_media": "",
+      "tier2:biology_crossover": "",
+      "tier2:anthropology_crossover": "",
+      "tier2:sociology_crossover": "",
+      "tier2:public_health_crossover": "",
+      "tier2:political_psychology_crossover": "",
+      "tier3:ascor": ""
+    }
+  },
+
+  "notion": {
+    "_comment_token": "Create an Integration at notion.so/my-integrations → copy 'Internal Integration Token'",
+    "token": "",
+
+    "_comment_database_id": "Open your Notion database → copy the ID from the URL (32-char hex string)",
+    "database_id": ""
+  }
+}

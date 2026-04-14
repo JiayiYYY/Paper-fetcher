@@ -1,0 +1,239 @@
+{
+  "_comment": "Semantic Scholar bulk search 支持 * 截断符。effect* 匹配 effects/effective/effectiveness 等。",
+
+  "tier1_core": {
+
+    "ai_fairness_decolonial": [
+      "algorithm* bias",
+      "AI fairness",
+      "generat* AI representation",
+      "decolonial AI",
+      "postcolonial technolog*",
+      "Global South digital inequalit*",
+      "intersectionalit* machine learning",
+      "AI bias race gender",
+      "platform governance inequalit*",
+      "datafication marginaliz*",
+      "coded gaze technolog*",
+      "algorithmic discriminat*"
+    ],
+
+    "sexual_behavior_youth": [
+      "adolescent sexual behavior* media",
+      "youth sexualit* online",
+      "sexting adolescent*",
+      "pornograph* adolescent* effect*",
+      "sexual socializ* media",
+      "online sexual risk* youth",
+      "digital sexual health",
+      "sexual script* media",
+      "non-consensual image* youth",
+      "sexual content exposure adolescent*"
+    ],
+
+    "social_media_wellbeing": [
+      "social media well-being adolescent*",
+      "screen time mental health youth",
+      "social comparison* Instagram TikTok",
+      "passiv* activ* social media use",
+      "social media depress* anxiet*",
+      "digital self-control adolescent*",
+      "social media overus* teenager*",
+      "platform design* wellbeing",
+      "doomscrolling mental health",
+      "disconnect* digital media youth",
+      "social media longitud* effect*"
+    ],
+
+    "gender_studies": [
+      "gender representat* media",
+      "feminist media analys*",
+      "content analys* gender stereotype*",
+      "non-binary representat* media",
+      "gender computat* communicat*",
+      "feminist quantitat* research",
+      "sexualiz* women media",
+      "gender bias news media",
+      "masculinit* media representat*",
+      "intersectional* gender media"
+    ],
+
+    "entertainment_youth_media": [
+      "entertainment media effect* children",
+      "media entertainment adolescent*",
+      "video game* youth effect*",
+      "stream* youth well-being",
+      "YouTube children media",
+      "parasocial relationship* youth",
+      "entertainment experienc* flow",
+      "media use identit* adolescent*",
+      "entertain* violenc* aggressi* children",
+      "media multitak* youth",
+      "binge-watch* adolescent*",
+      "fandom identit* youth",
+      "entertain* educat* children",
+      "short-form video youth"
+    ]
+  },
+
+  "tier2_interdisciplinary": {
+    "_comment": "每组限 5 篇。关键词聚焦真正的跨学科交叉点。",
+
+    "biology_crossover": [
+      "differential susceptibilit* media",
+      "biological* media effect* adolescent*",
+      "genetic* temperament media",
+      "pubert* media susceptibilit*",
+      "neurobiolog* social media adolescent*",
+      "hormonal* media consumption",
+      "biosocial* screen time child*"
+    ],
+
+    "anthropology_crossover": [
+      "digital ethnograph* social media",
+      "cultural practic* algorithm*",
+      "ritual* media consumption",
+      "indigenous media representat*",
+      "ethnograph* platform use youth",
+      "cross-cultural media effect*",
+      "digital anthropolog* youth"
+    ],
+
+    "sociology_crossover": [
+      "platform capitaliz* youth",
+      "digital inequalit* socioeconomic*",
+      "surveillance capitaliz* data",
+      "structural inequalit* algorithm*",
+      "social stratif* digital media",
+      "datafication everyday life"
+    ],
+
+    "public_health_crossover": [
+      "digital sleep health adolescent*",
+      "media use intervention* mental health",
+      "health communicat* misinformat* youth",
+      "screen time physical health child*",
+      "digital media eating disorder*",
+      "social media body image intervention*",
+      "problematic internet use adolescent*"
+    ],
+
+    "political_psychology_crossover": [
+      "political socializ* media youth",
+      "misinformat* political psycholog*",
+      "affective polariz* social media",
+      "news avoid* political disengag*",
+      "framing effect* political attitud*",
+      "propaganda digital media effect*",
+      "authoritarian* media consumpt*",
+      "moral foundation* media",
+      "political emotion* communicat*",
+      "conspir* theor* social media"
+    ]
+  },
+
+  "tier3_ascor_scholars": {
+    "_comment": "ASCoR Youth & Media Entertainment 组学者",
+    "scholars": [
+      "Patti Valkenburg",
+      "Jochen Peter",
+      "Jessica Piotrowski",
+      "Sindy Sumter",
+      "Susanne Baumgartner",
+      "Ine Beyens",
+      "Jeroen Lemmens",
+      "Annemarie van Oosten",
+      "Irene van Driel",
+      "Marthe Möller",
+      "Hande Sungur",
+      "Amber van der Wal",
+      "Rusen Tanribilir",
+      "Lauren Taylor",
+      "Lise-Marie Nassen",
+      "Chei Billedo",
+      "Dominique Wirz",
+      "Saurabh Khanna"
+    ]
+  },
+
+  "tier4_global_scholars": {
+    "_comment": "全球各领域知名学者",
+    "ai_fairness_decolonial": [
+      "Joy Buolamwini",
+      "Timnit Gebru",
+      "Safiya Umoja Noble",
+      "Ruha Benjamin",
+      "Abeba Birhane",
+      "Chinasa Okolo",
+      "Sasha Costanza-Chock",
+      "Ben Green"
+    ],
+    "social_media_youth_wellbeing": [
+      "Amy Orben",
+      "Andrew Przybylski",
+      "Jean Twenge",
+      "Jeff Hancock",
+      "Laura Vandenbosch",
+      "Candice Odgers",
+      "Douglas Gentile",
+      "Yalda Uhls"
+    ],
+    "sexual_behavior_youth": [
+      "Jane Brown",
+      "Janis Whitlock",
+      "Michael Mrug"
+    ],
+    "gender_media": [
+      "Liesbet van Zoonen",
+      "Rosalind Gill",
+      "Carolyn Kitch",
+      "Gaye Tuchman"
+    ]
+  },
+
+  "tier5_journals": {
+    "_comment": "按期刊直接搜索，使用 Semantic Scholar venue 参数。每本期刊取最新论文。",
+    "your_watchlist": [
+      "Computers in Human Behavior",
+      "Media Psychology",
+      "Communication Monographs",
+      "Feminist Media Studies",
+      "Information Communication and Society",
+      "Journal of Children and Media",
+      "Journal of Communication",
+      "Human Communication Research"
+    ],
+    "high_impact_comm": [
+      "New Media and Society",
+      "Journal of Computer-Mediated Communication",
+      "Communication Research",
+      "Mass Communication and Society",
+      "Social Media and Society",
+      "Political Communication",
+      "Journalism and Mass Communication Quarterly",
+      "Communication Theory"
+    ],
+    "psychology_adjacent": [
+      "Psychology of Popular Media",
+      "Cyberpsychology Behavior and Social Networking",
+      "Journal of Media Psychology",
+      "Technology Mind and Behavior",
+      "Developmental Psychology",
+      "Journal of Youth and Adolescence",
+      "Journal of Adolescence"
+    ],
+    "gender_feminist": [
+      "Gender and Society",
+      "Sex Roles",
+      "Psychology of Women Quarterly",
+      "Women's Studies in Communication"
+    ],
+    "interdisciplinary_high_impact": [
+      "Nature Human Behaviour",
+      "Perspectives on Psychological Science",
+      "Psychological Science",
+      "PNAS",
+      "Science Advances"
+    ]
+  }
+}
