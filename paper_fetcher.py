@@ -412,34 +412,46 @@ def run_authors(topics: dict, since: str) -> list:
 
 def run_journals(topics: dict, since: str) -> list:
     """
-    按期刊名直接搜索，使用 Semantic Scholar venue 参数。
-    比关键词搜索更精准，确保结果来自指定期刊。
+    Tier 5 期刊搜索。
+    所有期刊都全量抓取最新文章，不过滤关键词（相当于目录浏览）。
     """
     tier5 = topics.get("tier5_journals", {})
     if not tier5:
         return []
 
     collected = []
-    print("\n[Tier 5] 期刊直接搜索")
+    print("\n[Tier 5] 期刊全量搜索")
 
     for group, journals in tier5.items():
         if group.startswith("_"):
             continue
         print(f"  {group}")
+
         for journal in journals:
             params = {
-                "query":                 journal,
+                "query":                 f'"{journal}"',
                 "fields":                PAPER_FIELDS,
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
                 "sort":                  "publicationDate:desc",
                 "venue":                 journal,
             }
-            data = _request("GET", S2_BULK_SEARCH, params=params)
-            if data:
-                papers = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
-                print(f"    {journal[:45]}: {len(papers)} 篇")
-                collected.extend(normalize(p, tag=f"tier5:{group}") for p in papers[:15])
+
+            all_results = []
+            while True:
+                data = _request("GET", S2_BULK_SEARCH, params=params)
+                if not data:
+                    break
+                batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
+                all_results.extend(batch)
+                token = data.get("token")
+                if not token:
+                    break
+                params = {"token": token, "fields": PAPER_FIELDS}
+                time.sleep(1.0)
+
+            print(f"    {journal[:50]}: {len(all_results)} 篇")
+            collected.extend(normalize(p, tag=f"tier5:{group}") for p in all_results)
             time.sleep(1.0)
 
     deduped = deduplicate(collected)
