@@ -1,12 +1,5 @@
 """
 paper_fetcher.py
-----------------
-搜索学术论文并保存到 Zotero 和 Notion。
-基于 Semantic Scholar 官方 Tutorial 最佳实践重写：
-  - 使用 /paper/search/bulk（推荐，资源消耗更低）
-  - 使用 /author/batch POST（批量查询，减少请求数）
-  - Exponential backoff（官方要求）
-  - 精确短语搜索语法
 
 运行模式：
     python paper_fetcher.py --mode search    # 按主题关键词（过去一个月）
