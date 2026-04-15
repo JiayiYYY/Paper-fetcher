@@ -31,8 +31,8 @@ st.markdown("""
 
 html, body, [class*="css"] { font-family:'DM Sans',sans-serif; background-color:var(--paper); color:var(--ink); }
 
-section[data-testid="stSidebar"] { background-color:var(--ink) !important; }
-section[data-testid="stSidebar"] * { color:var(--paper) !important; }
+section[data-testid="stSidebar"] { background-color:#7a5038 !important; }
+section[data-testid="stSidebar"] * { color:#fdf0e4 !important; }
 section[data-testid="stSidebar"] input { color:var(--ink) !important; background:#fff !important; }
 section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] * { color:var(--ink) !important; }
 section[data-testid="stSidebar"] .stMultiSelect div[data-baseweb="select"] * { color:var(--ink) !important; }
@@ -218,9 +218,9 @@ with st.expander("👋 What is this?", expanded=True):
     st.markdown("""
 <div class="intro-box">
 
-Hi there. I'm a wandering waffle in the Netherlands — don't ask me why waffle, I don't even particularly like waffles. Or stroopwafels.
+Hi there. I'm a wandering waffle in the Netherlands. Don't ask me why waffle, I don't even like waffles. Or stroopwafels.
 
-I'm a researcher in communication science. My work touches on things I genuinely find fascinating:
+I'm a researcher in communication science, this app is built for topics I'm interested in:
 
 <span class="tier-pill" style="background:#fde0ea;color:#d63d6e">AI Fairness & Decolonial perspectives</span>
 <span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Sexual Behavior & Youth</span>
@@ -228,7 +228,7 @@ I'm a researcher in communication science. My work touches on things I genuinely
 <span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Gender Studies</span>
 <span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Entertainment & Youth Media</span>
 
-And because I refuse to stay in my lane, I also pull in crossover stuff from:
+I also pull in crossover (interdisciplinary knowledge) from:
 
 <span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Biology</span>
 <span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Anthropology</span>
@@ -236,17 +236,16 @@ And because I refuse to stay in my lane, I also pull in crossover stuff from:
 <span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Public Health</span>
 <span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Political Psychology</span>
 
-That's what this app is for — keeping tabs on the literature so I don't have to manually stalk every journal every week.
-You're very welcome to check out the **[GitHub repo](https://github.com)** and fork it for your own research interests.
+You're very welcome to check out the **[GitHub repo](https://github.com)** and tailor it for your own research interests.
 
 ---
 
 **How it works**
 
 You need three API keys to run this:
-- 🔑 **Semantic Scholar** — free, [request here](https://www.semanticscholar.org/product/api)
-- 📚 **Zotero** — free, from [zotero.org/settings/security](https://www.zotero.org/settings/security)
-- 📝 **Notion** — free, from [notion.so/my-integrations](https://notion.so/my-integrations)
+- **Semantic Scholar** — free, [request here](https://www.semanticscholar.org/product/api)
+- **Zotero** — free, from [zotero.org/settings/security](https://www.zotero.org/settings/security)
+- **Notion** — free, from [notion.so/my-integrations](https://notion.so/my-integrations)
 
 **What the search tiers mean:**
 
@@ -255,7 +254,7 @@ You need three API keys to run this:
 | 🔴 **Core** | Keyword search across my main research topics |
 | 🟢 **Crossover** | Interdisciplinary searches — limited results per keyword to avoid noise |
 | 🟡 **Scholars** | Tracks recent publications from specific researchers I follow (ASCoR + global) |
-| 🟣 **Journals** | Full table-of-contents sweep of journals I care about — all recent articles, no keyword filter |
+| 🟣 **Journals** | Full table-of-contents of journals I follow — all recent articles, no keyword filter |
 
 Hit **▶ Run** to fetch papers, preview results here, and optionally save to Zotero and/or Notion. Use **Dry run** first to see what you'd get before actually saving anything.
 
