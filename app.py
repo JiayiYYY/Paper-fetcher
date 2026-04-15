@@ -186,6 +186,7 @@ for k, v in {"results": [], "saved_this": 0}.items():
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🧇")
+    st.markdown("*Please enter your Keys here")
     st.divider()
 
     st.markdown("### API Keys")
