@@ -16,8 +16,12 @@ st.set_page_config(page_title="Wise Waffle", page_icon="🧇", layout="wide", in
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
 
+html, body, [class*="css"] { font-family: Cambria, Georgia, serif; background-color:var(--paper); color:var(--ink); }
+
+h1 { font-family: Cambria, Georgia, serif; font-size:2.8rem; letter-spacing:-0.02em; }
+h3 { font-family: Cambria, Georgia, serif; font-weight:500; font-size:1rem; }
 :root {
     --ink:     #1a1a1a;
     --paper:   #fdf8f2;
@@ -228,8 +232,26 @@ with st.sidebar:
         st.success("History cleared.")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-st.markdown("# 🧇 Wise Waffle")
-st.markdown("*Weekly academic literature tracker · Semantic Scholar → Zotero & Notion*")
+st.markdown("""
+<div style="text-align:center; padding: 2.5rem 0 1rem 0;">
+    <div style="font-size:3.5rem; animation: bounce 2s ease infinite; display:inline-block;">🧇</div>
+    <h1 style="font-family:Cambria,Georgia,serif; font-size:3.2rem; letter-spacing:-0.02em;
+               background: linear-gradient(135deg, #d63d6e, #f5a623, #2aaa8a);
+               -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+               background-clip: text; margin: 0.3rem 0 0.5rem 0;">
+        Wise Waffle
+    </h1>
+    <p style="color:#9a9490; font-family:'DM Mono',monospace; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase;">
+        Weekly academic literature tracker &nbsp;·&nbsp; Semantic Scholar → Zotero & Notion
+    </p>
+</div>
+<style>
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ── Introduction ──────────────────────────────────────────────────────────────
 with st.expander("👋 What is this?", expanded=True):
