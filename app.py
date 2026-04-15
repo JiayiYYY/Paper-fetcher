@@ -181,8 +181,26 @@ for k, v in {"results": [], "saved_this": 0}.items():
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🧇 Wise Waffle")
-    st.markdown("*Your weekly lit tracker*")
+    st.markdown("""
+    <div style="text-align:center; padding: 2.5rem 0 1rem 0;">
+    <div style="font-size:3.5rem; animation: bounce 2s ease infinite;">🧇</div>
+    <h1 style="font-family:'DM Serif Display',serif; font-size:3.2rem; letter-spacing:-0.02em;
+               background: linear-gradient(135deg, #d63d6e, #f5a623, #2aaa8a);
+               -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+               background-clip: text; margin: 0.3rem 0 0.5rem 0;">
+        Wise Waffle
+    </h1>
+    <p style="color:#9a9490; font-family:'DM Mono',monospace; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase;">
+        Weekly academic literature tracker &nbsp;·&nbsp; Semantic Scholar → Zotero & Notion
+    </p>
+</div>
+<style>
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+</style>
+""", unsafe_allow_html=True)
     st.divider()
 
     st.markdown("### API Keys")
