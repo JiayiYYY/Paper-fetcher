@@ -12,7 +12,7 @@ from collections import Counter
 import streamlit as st
 import paper_fetcher as pf
 
-st.set_page_config(page_title="Wise Waffle", page_icon="🧇", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Wise Tom", page_icon="🧇", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
