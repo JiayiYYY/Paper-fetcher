@@ -1,5 +1,5 @@
 """
-app.py — LitRadar: Academic Literature Tracker
+app.py — Wise Waffle: Academic Literature Tracker
 Run with: py -m streamlit run app.py
 """
 
@@ -12,20 +12,27 @@ from collections import Counter
 import streamlit as st
 import paper_fetcher as pf
 
-st.set_page_config(page_title="LitRadar", page_icon="📡", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Wise Waffle", page_icon="🧇", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
 
-:root { --ink:#0f0e0d; --paper:#f7f4ef; --accent:#c84b2f; --soft:#e8e3db; --muted:#8a8480; }
+:root {
+    --ink:     #1a1a1a;
+    --paper:   #fdf8f2;
+    --accent:  #d63d6e;
+    --teal:    #2aaa8a;
+    --yellow:  #f5a623;
+    --blush:   #f7c5d5;
+    --soft:    #ede8e0;
+    --muted:   #9a9490;
+}
 
 html, body, [class*="css"] { font-family:'DM Sans',sans-serif; background-color:var(--paper); color:var(--ink); }
 
 section[data-testid="stSidebar"] { background-color:var(--ink) !important; }
 section[data-testid="stSidebar"] * { color:var(--paper) !important; }
-
-/* Fix: API key input text black */
 section[data-testid="stSidebar"] input { color:var(--ink) !important; background:#fff !important; }
 section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] * { color:var(--ink) !important; }
 section[data-testid="stSidebar"] .stMultiSelect div[data-baseweb="select"] * { color:var(--ink) !important; }
@@ -35,29 +42,45 @@ h3 { font-family:'DM Sans',sans-serif; font-weight:500; font-size:1rem; }
 
 .paper-card {
     background:white; border:1px solid var(--soft); border-left:3px solid var(--accent);
-    border-radius:4px; padding:1.1rem 1.3rem; margin-bottom:0.75rem;
+    border-radius:6px; padding:1.1rem 1.3rem; margin-bottom:0.75rem;
+    transition: box-shadow 0.15s;
 }
+.paper-card:hover { box-shadow: 0 2px 12px rgba(214,61,110,0.1); }
 .paper-title { font-family:'DM Serif Display',serif; font-size:1.05rem; margin-bottom:0.2rem; }
 .paper-meta  { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); margin-bottom:0.4rem; }
 .paper-tag {
     display:inline-block; font-family:'DM Mono',monospace; font-size:0.65rem;
-    padding:2px 7px; border-radius:2px; background:var(--soft); color:var(--ink); margin-right:4px;
+    padding:2px 7px; border-radius:20px; background:var(--soft); color:var(--ink); margin-right:4px;
 }
-.tag-tier1 { background:#fde8e2; color:#c84b2f; }
-.tag-tier2 { background:#e2edf7; color:#2a5f8f; }
-.tag-tier3 { background:#e2f0e8; color:#2d6a4f; }
+.tag-tier1 { background:#fde0ea; color:#d63d6e; }
+.tag-tier2 { background:#d4f0e8; color:#1e8a6e; }
+.tag-tier3 { background:#fef3d6; color:#b87c0a; }
+.tag-tier5 { background:#e8e0f5; color:#6b3a8f; }
 
-.stat-box   { background:white; border:1px solid var(--soft); border-radius:4px; padding:1rem; text-align:center; }
+.stat-box   { background:white; border:1px solid var(--soft); border-radius:8px; padding:1rem; text-align:center; }
 .stat-num   { font-family:'DM Serif Display',serif; font-size:2.2rem; color:var(--accent); }
 .stat-label { font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; }
 
 .stButton > button {
     background:var(--accent) !important; color:white !important; border:none !important;
-    border-radius:3px !important; font-family:'DM Sans',sans-serif !important;
-    font-weight:500 !important; padding:0.5rem 1.5rem !important;
+    border-radius:20px !important; font-family:'DM Sans',sans-serif !important;
+    font-weight:500 !important; padding:0.5rem 1.8rem !important;
 }
+.stButton > button:hover { opacity:0.88; }
+
+.intro-box {
+    background: linear-gradient(135deg, #fff5f8 0%, #f0faf6 100%);
+    border: 1px solid var(--blush);
+    border-radius: 12px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 1.5rem;
+}
+.tier-pill {
+    display:inline-block; font-family:'DM Mono',monospace; font-size:0.7rem;
+    padding:3px 10px; border-radius:20px; margin:2px;
+}
+
 .abstract-text { font-size:0.85rem; color:#444; line-height:1.6; margin-top:0.5rem; }
-.tag-tier5 { background: #f0e8f7; color: #6b3a8f; }
 hr { border-color:var(--soft); }
 </style>
 """, unsafe_allow_html=True)
@@ -158,8 +181,8 @@ for k, v in {"results": [], "saved_this": 0}.items():
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 📡 LitRadar")
-    st.markdown("*Academic literature tracker*")
+    st.markdown("## 🧇 Wise Waffle")
+    st.markdown("*Your weekly lit tracker*")
     st.divider()
 
     st.markdown("### API Keys")
@@ -187,8 +210,58 @@ with st.sidebar:
         st.success("History cleared.")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-st.markdown("# 📡 LitRadar")
+st.markdown("# 🧇 Wise Waffle")
 st.markdown("*Weekly academic literature tracker · Semantic Scholar → Zotero & Notion*")
+
+# ── Introduction ──────────────────────────────────────────────────────────────
+with st.expander("👋 What is this?", expanded=True):
+    st.markdown("""
+<div class="intro-box">
+
+Hi there. I'm a wandering waffle in the Netherlands — don't ask me why waffle, I don't even particularly like waffles. Or stroopwafels.
+
+I'm a researcher in communication science. My work touches on things I genuinely find fascinating:
+
+<span class="tier-pill" style="background:#fde0ea;color:#d63d6e">AI Fairness & Decolonial perspectives</span>
+<span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Sexual Behavior & Youth</span>
+<span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Social Media & Wellbeing</span>
+<span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Gender Studies</span>
+<span class="tier-pill" style="background:#fde0ea;color:#d63d6e">Entertainment & Youth Media</span>
+
+And because I refuse to stay in my lane, I also pull in crossover stuff from:
+
+<span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Biology</span>
+<span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Anthropology</span>
+<span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Sociology</span>
+<span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Public Health</span>
+<span class="tier-pill" style="background:#d4f0e8;color:#1e8a6e">Political Psychology</span>
+
+That's what this app is for — keeping tabs on the literature so I don't have to manually stalk every journal every week.
+You're very welcome to check out the **[GitHub repo](https://github.com)** and fork it for your own research interests.
+
+---
+
+**How it works**
+
+You need three API keys to run this:
+- 🔑 **Semantic Scholar** — free, [request here](https://www.semanticscholar.org/product/api)
+- 📚 **Zotero** — free, from [zotero.org/settings/security](https://www.zotero.org/settings/security)
+- 📝 **Notion** — free, from [notion.so/my-integrations](https://notion.so/my-integrations)
+
+**What the search tiers mean:**
+
+| Tier | What it does |
+|------|-------------|
+| 🔴 **Core** | Keyword search across my main research topics |
+| 🟢 **Crossover** | Interdisciplinary searches — limited results per keyword to avoid noise |
+| 🟡 **Scholars** | Tracks recent publications from specific researchers I follow (ASCoR + global) |
+| 🟣 **Journals** | Full table-of-contents sweep of journals I care about — all recent articles, no keyword filter |
+
+Hit **▶ Run** to fetch papers, preview results here, and optionally save to Zotero and/or Notion. Use **Dry run** first to see what you'd get before actually saving anything.
+
+</div>
+""", unsafe_allow_html=True)
+
 st.divider()
 
 config_ok = bool(s2_key)
