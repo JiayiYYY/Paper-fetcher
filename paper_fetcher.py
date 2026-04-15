@@ -413,7 +413,7 @@ def run_authors(topics: dict, since: str) -> list:
 def run_journals(topics: dict, since: str) -> list:
     """
     Tier 5 期刊搜索。
-    所有期刊都全量抓取最新文章，不过滤关键词（相当于目录浏览）。
+    venue 作为独立参数传入，query 用通配符 * 避免关键词 AND 干扰。
     """
     tier5 = topics.get("tier5_journals", {})
     if not tier5:
@@ -429,12 +429,12 @@ def run_journals(topics: dict, since: str) -> list:
 
         for journal in journals:
             params = {
-                "query":                 f'"{journal}"',
+                "query":                 "*",            # 通配符，不限制关键词
                 "fields":                PAPER_FIELDS,
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
                 "sort":                  "publicationDate:desc",
-                "venue":                 journal,
+                "venue":                 journal,        # venue 作为独立过滤参数
             }
 
             all_results = []
