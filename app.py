@@ -278,6 +278,26 @@ You need three API keys to run this:
 | 🟡 **Scholars** | Tracks recent publications from specific researchers I follow (ASCoR + global) |
 | 🟣 **Journals** | Full table-of-contents of journals I follow — all recent articles, no keyword filter |
 
+with st.expander("📋 Journals we search (Tier 5)"):
+        topics = load_json_safe(TOPICS_PATH) or {}
+        tier5 = topics.get("tier5_journals", {})
+        group_labels = {
+            "your_watchlist":              "📌 Watchlist",
+            "high_impact_comm":            "📡 High Impact Communication",
+            "psychology_adjacent":         "🧠 Psychology Adjacent",
+            "gender_feminist":             "♀ Gender & Feminist",
+            "interdisciplinary_high_impact": "🔬 Interdisciplinary",
+        }
+        for group, journals in tier5.items():
+            if group.startswith("_"):
+                continue
+            label = group_labels.get(group, group)
+            st.markdown(f"**{label}**")
+            cols = st.columns(3)
+            for i, j in enumerate(journals):
+                cols[i % 3].markdown(f"· {j}")
+            st.markdown("")
+            
 Hit **▶ Run** to fetch papers, preview results here, and optionally save to Zotero and/or Notion. Use **Dry run** first to see what you'd get before actually saving anything.
 
 </div>
