@@ -626,10 +626,6 @@ def save_to_zotero(papers: list, config: dict, dry_run: bool = False) -> None:
 # ─────────────────────────────────────────
 
 def save_to_notion(papers: list, config: dict, dry_run: bool = False) -> None:
-    """
-    保存到 Notion。Tier 信息写入 Select 字段 'Tier'，便于筛选过滤。
-    Notion database 需要新增一列：'Tier'，类型选 Select。
-    """
     if dry_run:
         tier_counts = Counter(_get_tier(p["tag"]) for p in papers)
         print(f"\n[Dry-run] Notion：{len(papers)} 篇（未执行）")
@@ -645,6 +641,7 @@ def save_to_notion(papers: list, config: dict, dry_run: bool = False) -> None:
     cfg    = config.get("notion", {})
     notion = Client(auth=cfg["token"])
     db_id  = cfg["database_id"]
+    print(f"[Notion] connecting to db: {db_id}")
     saved  = skipped = 0
 
     for p in papers:
@@ -657,27 +654,22 @@ def save_to_notion(papers: list, config: dict, dry_run: bool = False) -> None:
             "DOI":      {"rich_text": [{"text": {"content": p["doi"][:500]}}]},
             "Abstract": {"rich_text": [{"text": {"content": p["abstract"][:2000]}}]},
             "Source":   {"rich_text": [{"text": {"content": p["tag"]}}]},
-            "Tier":     {"select":    {"name": tier}},   # Select 字段，可直接筛选
+            "Tier":     {"select":    {"name": tier}},
         }
         if p["url"]:
             props["URL"] = {"url": p["url"]}
         try:
-            notion.pages.create(parent={"database_id": db_id}, properties=props)
+            result = notion.pages.create(parent={"database_id": db_id}, properties=props)
             saved += 1
+            print(f"  [Notion ✓] {p['title'][:60]} → {result.get('id','')}")
             time.sleep(0.35)
         except Exception as e:
             import traceback
-            print(f"  [Notion 失败] '{p['title'][:50]}'")
-            print(f"  {type(e).__name__}: {e}")
+            print(f"  [Notion 失败] {type(e).__name__}: {e}")
             print(traceback.format_exc())
             skipped += 1
 
     print(f"[Notion] 已保存 {saved} 篇，跳过 {skipped} 篇")
-    notion.pages.create(parent={"database_id": db_id}, properties=props)
-            saved += 1
-            print(f"  [Notion ✓] saved: {p['title'][:60]}")
-            print(f"  [Notion ✓] db_id used: {db_id}")
-            time.sleep(0.35)
 
 # ─────────────────────────────────────────
 # 主程序
