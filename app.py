@@ -93,6 +93,8 @@ BASE_DIR    = Path(__file__).parent
 CONFIG_PATH = BASE_DIR / "config.json"
 TOPICS_PATH = BASE_DIR / "topics.json"
 SAVED_PATH  = BASE_DIR / "saved_dois.json"
+JOURNALS_PATH = BASE_DIR / "journals.json"
+
 
 TOPIC_LABELS = {
     "tier1:ai_fairness_decolonial":          "AI Fairness & Decolonial",
