@@ -421,7 +421,7 @@ if run_btn:
                 all_papers.extend(pf.run_authors(topics, since))
             if mode in ("journals", "all"):
                 log_lines.append("\n── Tier 5: Journal sweep ──"); update_log()
-                all_papers.extend(pf.run_journals(topics, since))
+                all_papers.extend(pf.run_journals(since))
             if mode == "all":
                 all_papers = pf.deduplicate(all_papers)
 
