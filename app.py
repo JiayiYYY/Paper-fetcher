@@ -180,7 +180,7 @@ def build_config(s2_key, zotero_id, zotero_key, notion_tok, notion_db):
     return cfg
 
 # ── Session state ─────────────────────────────────────────────────────────────
-for k, v in {"results": [], "saved_this": 0}.items():
+for k, v in {"results": [], "saved_this": 0, "selected_dois": set()}.items():
     if k not in st.session_state: st.session_state[k] = v
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -527,8 +527,29 @@ if results:
         unsafe_allow_html=True
     )
 
+    # ── Select controls ──
+    sel_col1, sel_col2, sel_col3 = st.columns([1, 1, 4])
+    with sel_col1:
+        if st.button("☑ Select all on page"):
+            for p in page_papers:
+                key = p["doi"] or p["title"]
+                st.session_state["selected_dois"].add(key)
+    with sel_col2:
+        if st.button("☐ Clear selection"):
+            st.session_state["selected_dois"] = set()
+
+    # ── Paper cards with checkboxes ──
     for p in page_papers:
-        render_paper_card(p)
+        key = p["doi"] or p["title"]
+        checked = key in st.session_state["selected_dois"]
+        col_check, col_card = st.columns([0.05, 0.95])
+        with col_check:
+            if st.checkbox("", value=checked, key=f"chk_{key[:50]}"):
+                st.session_state["selected_dois"].add(key)
+            else:
+                st.session_state["selected_dois"].discard(key)
+        with col_card:
+            render_paper_card(p)
 
     # Pagination controls
     if total_pages > 1:
@@ -556,6 +577,29 @@ if results:
             if st.button("Last ⟫") and page < total_pages:
                 st.session_state["page"] = total_pages
                 st.rerun()
-
+# ── Save selected ──
+    selected_papers = [
+        p for p in filtered
+        if (p["doi"] or p["title"]) in st.session_state["selected_dois"]
+    ]
+    if selected_papers:
+        st.markdown(f"**{len(selected_papers)} papers selected**")
+        save_col1, save_col2, save_col3 = st.columns([1, 1, 4])
+        config = build_config(s2_key, zotero_id, zotero_key, notion_tok, notion_db)
+        with save_col1:
+            if st.button("💾 Save to Zotero", disabled=not (zotero_id and zotero_key)):
+                pf.S2_HEADERS = {"x-api-key": s2_key} if s2_key else {}
+                pf.save_to_zotero(selected_papers, config)
+                pf.record_saved(selected_papers)
+                st.session_state["selected_dois"] = set()
+                st.success(f"✓ {len(selected_papers)} papers saved to Zotero.")
+        with save_col2:
+            if st.button("📝 Save to Notion", disabled=not (notion_tok and notion_db)):
+                pf.S2_HEADERS = {"x-api-key": s2_key} if s2_key else {}
+                pf.save_to_notion(selected_papers, config)
+                pf.record_saved(selected_papers)
+                st.session_state["selected_dois"] = set()
+                st.success(f"✓ {len(selected_papers)} papers saved to Notion.")
+                
     if st.session_state["saved_this"] > 0:
         st.success(f"✓ {st.session_state['saved_this']} papers saved to {target}.")
