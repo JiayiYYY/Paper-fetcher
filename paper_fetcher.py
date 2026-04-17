@@ -229,7 +229,7 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         if not data:
             break
 
-        batch = [p for p in data.get("data", []) if _is_english(p)]
+        batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]        
         results.extend(batch)
 
         # token 翻页（bulk search 的分页方式）
@@ -283,8 +283,7 @@ def get_papers_for_authors(author_ids: list[str], since: str, papers_per_author:
             time.sleep(1.2)
             continue
         papers = data.get("data", [])
-        recent = [p for p in papers if _is_recent(p, since) and _is_english(p)]
-        recent = sorted(recent, key=lambda p: p.get("publicationDate") or "", reverse=True)
+        recent = [p for p in papers if _is_recent(p, since) and _is_english(p) and _has_abstract(p)]        recent = sorted(recent, key=lambda p: p.get("publicationDate") or "", reverse=True)
         all_papers.extend(recent[:papers_per_author])
         time.sleep(1.2)
 
