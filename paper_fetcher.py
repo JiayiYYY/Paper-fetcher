@@ -409,15 +409,6 @@ def run_authors(topics: dict, since: str) -> list:
 # ─────────────────────────────────────────
 
 def run_journals(since: str) -> list:
-    """
-    Tier 5 期刊搜索。
-    从 journals.json 读取期刊分组。
-    不走关键词逻辑，不加 fieldsOfStudy，只保留：
-      - JournalArticle
-      - 时间范围
-      - 英语
-      - 有摘要
-    """
     journal_cfg = load_json(JOURNALS_PATH)
     if not journal_cfg:
         return []
