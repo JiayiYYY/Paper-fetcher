@@ -595,7 +595,12 @@ if results:
         checked = pk in st.session_state["selected_keys"]
         col_chk, col_card = st.columns([0.04, 0.96])
         with col_chk:
-            new_val = st.checkbox("", value=checked, key=f"chk_{pk[:60]}", label_visibility="collapsed")
+            new_val = st.checkbox(
+    "select paper",
+    value=checked,
+    key=f"chk_{pk[:60]}",
+    label_visibility="collapsed"
+)
             if new_val:
                 st.session_state["selected_keys"].add(pk)
             else:
