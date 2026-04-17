@@ -226,15 +226,14 @@ with st.sidebar:
     st.markdown("## 🧇")
     st.divider()
 
-    st.markdown("### API Keys")
     # ── Host auto-fill ──
     host_secrets = st.secrets.get("host", {}) if hasattr(st, "secrets") else {}
     is_host = bool(host_secrets)
 
+    st.markdown("### API Keys")
     if is_host:
         if st.button("⚡ Fill my credentials"):
             st.session_state["prefill"] = True
-                for k, v in {"results": [], "saved_this": 0, "selected_keys": set(), "page": 1, "last_filtered_count": 0, "prefill": False}.items():
 
     if st.session_state.get("prefill") and is_host:
         s2_key     = st.text_input("Semantic Scholar API Key", value=host_secrets.get("s2_key",""),     type="password")
@@ -250,14 +249,15 @@ with st.sidebar:
         notion_db  = st.text_input("Notion Database ID",       placeholder="32-char ID")
 
     with st.expander("📁 Zotero Collection Keys (optional)"):
-        st.markdown(...)
+        st.markdown('<p style="font-size:0.75rem;color:#aaa;margin-bottom:0.5rem">8-char key from each collection URL. Leave blank to save to root library.</p>', unsafe_allow_html=True)
         host_colls = st.secrets.get("host_collections", {}) if hasattr(st, "secrets") else {}
         collection_keys = {}
         for key, label in COLLECTION_KEY_LABELS.items():
             default = host_colls.get(key, "") if st.session_state.get("prefill") else ""
             collection_keys[key] = st.text_input(label, value=default, placeholder="e.g. ABC12345", key=f"coll_{key}")
-            
+
     st.divider()
+    
     st.markdown("### Search Settings")
     mode = st.selectbox("Mode", ["all","search","authors","journals"],
         format_func=lambda x: {"all":"All (keywords + scholars + journals)",
