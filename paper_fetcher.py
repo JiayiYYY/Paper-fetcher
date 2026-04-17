@@ -445,7 +445,6 @@ def run_journals(topics: dict, since: str) -> list:
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
                 "sort":                  "publicationDate:desc",
-                "venue":                 journal,
             }
 
             all_results = []
