@@ -408,27 +408,45 @@ def run_authors(topics: dict, since: str) -> list:
 # 期刊直接搜索（Tier 5）
 # ─────────────────────────────────────────
 
+def _openalex_rebuild_abstract(inv: dict | None) -> str:
+    if not inv:
+        return ""
+    words = []
+    for word, positions in inv.items():
+        for pos in positions:
+            words.append((pos, word))
+    words.sort(key=lambda x: x[0])
+    return " ".join(word for _, word in words)
+
+
 def run_journals(since: str) -> list:
     journal_cfg = load_json(JOURNALS_PATH)
     if not journal_cfg:
         return []
 
     collected = []
-    print("\n[Tier 5] OpenAlex 期刊全量搜索")
+    print("\n[Tier 5] OpenAlex (ID-based)")
 
     for group, journals in journal_cfg.items():
         if group.startswith("_"):
             continue
         print(f"  {group}")
 
-        for journal in journals:
+        for item in journals:
+            journal = item["name"]
+            source_id = item["id"]
+
+            if not source_id:
+                print(f"    {journal[:50]}: skipped (no id)")
+                continue
+
             all_results = []
             page = 1
 
             while True:
                 url = "https://api.openalex.org/works"
                 params = {
-                    "filter": f'primary_location.source.display_name:"{journal}",from_publication_date:{since},type:article',
+                    "filter": f"primary_location.source.id:{source_id},from_publication_date:{since},type:article",
                     "per-page": 100,
                     "page": page,
                 }
@@ -450,37 +468,29 @@ def run_journals(since: str) -> list:
 
                 batch = []
                 for p in results:
-                    abstract = ""
-                    inv = p.get("abstract_inverted_index")
-                    if inv:
-                        words = []
-                        for word, positions in inv.items():
-                            for pos in positions:
-                                words.append((pos, word))
-                        words.sort(key=lambda x: x[0])
-                        abstract = " ".join(word for _, word in words)
-
                     authors = []
                     for a in p.get("authorships", []):
                         author_obj = a.get("author") or {}
                         name = author_obj.get("display_name", "")
                         if name:
-                            authors.append(name)
+                            authors.append({"name": name})
 
                     doi = p.get("doi", "") or ""
                     if doi.startswith("https://doi.org/"):
                         doi = doi.replace("https://doi.org/", "", 1)
 
-                    source = (p.get("primary_location") or {}).get("source") or {}
-                    landing = (p.get("primary_location") or {}).get("landing_page_url", "") or ""
-                    pdf_url = (p.get("open_access") or {}).get("oa_url", "") or ""
+                    primary_location = p.get("primary_location") or {}
+                    source = primary_location.get("source") or {}
+                    landing = primary_location.get("landing_page_url", "") or ""
+                    oa = p.get("open_access") or {}
+                    pdf_url = oa.get("oa_url", "") or ""
 
                     paper = {
                         "title": p.get("title", "") or "Untitled",
-                        "authors": [{"name": name} for name in authors],
+                        "authors": authors,
                         "year": p.get("publication_year", ""),
                         "publicationDate": p.get("publication_date", "") or "",
-                        "abstract": abstract,
+                        "abstract": _openalex_rebuild_abstract(p.get("abstract_inverted_index")),
                         "venue": source.get("display_name", "") or journal,
                         "externalIds": {"DOI": doi},
                         "url": landing or pdf_url or p.get("id", ""),
@@ -492,7 +502,7 @@ def run_journals(since: str) -> list:
                         batch.append(paper)
 
                 all_results.extend(batch)
-                print(f"    {journal[:50]}: page {page}, +{len(batch)}")
+                print(f"    {journal[:50]}: page {page}, raw={len(results)}, kept={len(batch)}")
 
                 if len(results) < 100:
                     break
