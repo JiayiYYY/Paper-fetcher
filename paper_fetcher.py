@@ -420,6 +420,7 @@ def _openalex_rebuild_abstract(inv: dict | None) -> str:
 
 
 def run_journals(since: str) -> list:
+    print(">>> RUN_JOURNALS OPENALEX ID VERSION LOADED <<<")
     journal_cfg = load_json(JOURNALS_PATH)
     if not journal_cfg:
         return []
