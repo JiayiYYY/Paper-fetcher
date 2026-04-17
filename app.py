@@ -250,7 +250,7 @@ with st.sidebar:
 
     with st.expander("📁 Zotero Collection Keys (optional)"):
         st.markdown('<p style="font-size:0.75rem;color:#aaa;margin-bottom:0.5rem">8-char key from each collection URL. Leave blank to save to root library.</p>', unsafe_allow_html=True)
-        host_colls = st.secrets.get("host_collections", {}) if hasattr(st, "secrets") else {}
+        host_colls = st.secrets.get("host_collections", {}) if hasattr(st, "secrets") and st.session_state.get("prefill") else {}        
         collection_keys = {}
         for key, label in COLLECTION_KEY_LABELS.items():
             default = host_colls.get(key, "") if st.session_state.get("prefill") else ""
