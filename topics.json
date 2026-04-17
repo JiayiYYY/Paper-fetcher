@@ -12,12 +12,13 @@
       "datafication (marginaliz* | inequalit* | surveillance)"
     ],
     "sexual_behavior_youth": [
-      "adolescent* (sexting | \"sexual behavior\" | \"sexual content\") media",
-      "\"online sexual\" (risk* | solicitation | harassment) youth | adolescent*",
-      "pornograph* adolescent* (effect* | exposure | use)",
-      "\"sexual socialization\" media | \"sexual scripts\" media",
-      "\"non-consensual\" (image* | sharing) youth | teen*",
-      "\"digital sexual health\" | \"online sex education\" youth"
+      "\"sexting\" (adolescent* | teen* | youth) (prevalence | behavior | risk* | effect*)",
+      "\"sexual content\" (exposure | use) (adolescent* | youth | teen*) effect*",
+      "pornograph* (adolescent* | youth | teen*) (attitude* | behavior | effect* | use)",
+      "\"sexual socialization\" (media | online | digital | peers)",
+      "\"online sexual\" (solicitation | harassment | grooming | risk*) (youth | adolescent* | teen*)",
+      "\"non-consensual\" (image* | sexting | \"intimate image\") (adolescent* | youth)",
+      "\"sexual script*\" media (adolescent* | youth | young adult*)"
     ],
     "social_media_wellbeing": [
       "\"social media\" (depression | anxiety | loneliness | wellbeing) (adolescent* | youth | teen*)",
