@@ -1,43 +1,47 @@
 {
-  "_comment": "Tier 5 journal list used by paper_fetcher.py. Keep group keys aligned with app.py topic labels and Zotero/Notion mappings.",
+  "_comment": "Tier 5 journal list with OpenAlex source IDs (production version)",
   "your_watchlist": [
-    "Computers in Human Behavior",
-    "Feminist Media Studies",
-    "Journal of Communication",
-    "Media Psychology",
-    "Information, Communication & Society",
-    "Human Communication Research",
-    "Communication Monographs",
-    "Journal of Children and Media"
+    {"name": "Computers in Human Behavior", "id": "S204030396"},
+    {"name": "Feminist Media Studies", "id": "S26978096"},
+    {"name": "Journal of Communication", "id": "S107737141"},
+    {"name": "Media Psychology", "id": "S97866008"},
+    {"name": "Information, Communication & Society", "id": "S70010600"},
+    {"name": "Human Communication Research", "id": "S195553305"},
+    {"name": "Communication Monographs", "id": "S173776643"},
+    {"name": "Journal of Children and Media", "id": "S199141608"}
   ],
+
   "high_impact_comm": [
-    "New Media & Society",
-    "Mass Communication and Society",
-    "Journalism & Mass Communication Quarterly",
-    "Journal of Computer-Mediated Communication",
-    "Social Media + Society",
-    "Communication Theory",
-    "Communication Research",
-    "Political Communication"
+    {"name": "New Media & Society", "id": "S88603889"},
+    {"name": "Mass Communication and Society", "id": "S153570774"},
+    {"name": "Journalism & Mass Communication Quarterly", "id": "S20010350"},
+    {"name": "Journal of Computer-Mediated Communication", "id": "S30594836"},
+    {"name": "Social Media + Society", "id": "S2764570952"},
+    {"name": "Communication Theory", "id": "S103253184"},
+    {"name": "Communication Research", "id": "S28604305"},
+    {"name": "Political Communication", "id": "S27211427"}
   ],
+
   "psychology_adjacent": [
-    "Psychology of Popular Media",
-    "Technology, Mind, and Behavior",
-    "Journal of Adolescence",
-    "Cyberpsychology, Behavior, and Social Networking",
-    "Developmental Psychology",
-    "Journal of Media Psychology",
-    "Journal of Youth and Adolescence"
+    {"name": "Psychology of Popular Media", "id": "S4210206634"},
+    {"name": "Technology, Mind, and Behavior", "id": "S4210236455"},
+    {"name": "Journal of Adolescence", "id": "S179289126"},
+    {"name": "Cyberpsychology, Behavior, and Social Networking", "id": "S118036144"},
+    {"name": "Developmental Psychology", "id": "S126635229"},
+    {"name": "Journal of Media Psychology", "id": "S167406155"},
+    {"name": "Journal of Youth and Adolescence", "id": "S126644992"}
   ],
+
   "gender_feminist": [
-    "Gender & Society",
-    "Women's Studies in Communication",
-    "Sex Roles",
-    "Psychology of Women Quarterly"
+    {"name": "Gender & Society", "id": "S113116626"},
+    {"name": "Women's Studies in Communication", "id": "S94339582"},
+    {"name": "Sex Roles", "id": "S73388012"},
+    {"name": "Psychology of Women Quarterly", "id": "S30211177"}
   ],
+
   "interdisciplinary_high_impact": [
-    "Nature Human Behaviour",
-    "Perspectives on Psychological Science",
-    "Psychological Science"
+    {"name": "Nature Human Behaviour", "id": "S2764866340"},
+    {"name": "Perspectives on Psychological Science", "id": "S27228949"},
+    {"name": "Psychological Science", "id": "S58854535"}
   ]
 }
