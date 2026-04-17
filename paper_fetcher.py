@@ -207,13 +207,6 @@ def _has_abstract(paper: dict) -> bool:
 
 
 def search_bulk(query: str, since: str, max_results: int = 100) -> list:
-    """
-    使用 /paper/search/bulk 搜索论文。
-    支持布尔语法（tutorial 示例）：
-      - 精确短语用引号：'"social media" +adolescents'
-      - 必须包含：+keyword
-      - 排除：-keyword
-    """
     params = {
         "query":                 query,
         "fields":                PAPER_FIELDS,
@@ -224,7 +217,7 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
     }
 
     results = []
-    url     = S2_BULK_SEARCH
+    url = S2_BULK_SEARCH
 
     while len(results) < max_results:
         data = _request("GET", url, params=params)
@@ -242,7 +235,6 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         time.sleep(1.2)
 
     return results[:max_results]
-
 # ─────────────────────────────────────────
 # 作者查询（batch endpoint，一次请求多位作者）
 # ─────────────────────────────────────────
@@ -416,24 +408,24 @@ def run_authors(topics: dict, since: str) -> list:
 # 期刊直接搜索（Tier 5）
 # ─────────────────────────────────────────
 
-def run_journals(topics: dict, since: str) -> list:
+def run_journals(since: str) -> list:
     """
     Tier 5 期刊搜索。
-    从 topics.json 的 tier5_journals 读取期刊分组。
+    从 journals.json 读取期刊分组。
     不走关键词逻辑，不加 fieldsOfStudy，只保留：
       - JournalArticle
       - 时间范围
       - 英语
       - 有摘要
     """
-    tier5 = topics.get("tier5_journals", {})
-    if not tier5:
+    journal_cfg = load_json(JOURNALS_PATH)
+    if not journal_cfg:
         return []
 
     collected = []
     print("\n[Tier 5] 期刊全量搜索")
 
-    for group, journals in tier5.items():
+    for group, journals in journal_cfg.items():
         if group.startswith("_"):
             continue
         print(f"  {group}")
@@ -445,6 +437,7 @@ def run_journals(topics: dict, since: str) -> list:
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
                 "sort":                  "publicationDate:desc",
+                "venue":                 journal,
             }
 
             all_results = []
@@ -693,7 +686,7 @@ def main():
             print(f"[缓存] 读取期刊结果（{len(cache['journals'])} 篇），跳过 API 请求")
             all_papers.extend(cache["journals"])
         else:
-            papers = run_journals(topics, since)
+            papers = run_journals(since)
             cache["journals"] = papers
             save_cache(cache)
             all_papers.extend(papers)
