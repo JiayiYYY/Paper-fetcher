@@ -220,6 +220,7 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         "publicationTypes":    "JournalArticle",        # 只要期刊文章
         "publicationDateOrYear": f"{since}:",           # 从 since 至今
         "sort":                "publicationDate:desc",  # 最新的排前面
+        "fieldsOfStudy":       "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
     }
 
     results = []
