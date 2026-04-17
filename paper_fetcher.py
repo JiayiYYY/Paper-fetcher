@@ -1,5 +1,12 @@
 """
 paper_fetcher.py
+----------------
+搜索学术论文并保存到 Zotero 和 Notion。
+基于 Semantic Scholar 官方 Tutorial 最佳实践重写：
+  - 使用 /paper/search/bulk（推荐，资源消耗更低）
+  - 使用 /author/batch POST（批量查询，减少请求数）
+  - Exponential backoff（官方要求）
+  - 精确短语搜索语法
 
 运行模式：
     python paper_fetcher.py --mode search    # 按主题关键词（过去一个月）
@@ -142,6 +149,12 @@ def _request(method: str, url: str, retries: int = 5, **kwargs) -> dict | None:
             if r.status_code == 429:
                 wait = (2 ** attempt) * 5   # 5, 10, 20, 40, 80 秒
                 print(f"  [限速 429] 等待 {wait}s 后重试（第 {attempt+1}/{retries} 次）...")
+                time.sleep(wait)
+                continue
+
+            if r.status_code in (500, 502, 503, 504):
+                wait = (2 ** attempt) * 3
+                print(f"  [服务器错误 {r.status_code}] 等待 {wait}s 后重试（第 {attempt+1}/{retries} 次）...")
                 time.sleep(wait)
                 continue
 
@@ -406,7 +419,8 @@ def run_authors(topics: dict, since: str) -> list:
 def run_journals(topics: dict, since: str) -> list:
     """
     Tier 5 期刊搜索。
-    venue 作为独立参数传入，query 用通配符 * 避免关键词 AND 干扰。
+    venue 作为独立参数，query 用通配符 * 不限关键词。
+    全量抓取时间段内所有文章，自动翻页。
     """
     tier5 = topics.get("tier5_journals", {})
     if not tier5:
@@ -421,16 +435,18 @@ def run_journals(topics: dict, since: str) -> list:
         print(f"  {group}")
 
         for journal in journals:
-            params = {
-                "query":                 "*",            # 通配符，不限制关键词
+            base_params = {
+                "query":                 "*",
                 "fields":                PAPER_FIELDS,
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
                 "sort":                  "publicationDate:desc",
-                "venue":                 journal,        # venue 作为独立过滤参数
+                "venue":                 journal,
             }
 
             all_results = []
+            params = base_params.copy()
+
             while True:
                 data = _request("GET", S2_BULK_SEARCH, params=params)
                 if not data:
@@ -440,7 +456,8 @@ def run_journals(topics: dict, since: str) -> list:
                 token = data.get("token")
                 if not token:
                     break
-                params = {"token": token, "fields": PAPER_FIELDS}
+                # Keep base params, only add token for next page
+                params = {**base_params, "token": token}
                 time.sleep(1.0)
 
             print(f"    {journal[:50]}: {len(all_results)} 篇")
