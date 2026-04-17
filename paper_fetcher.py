@@ -499,7 +499,7 @@ def run_journals(since: str) -> list:
                         "publicationTypes": ["JournalArticle"],
                     }
 
-                    if _is_recent(paper, since) and _is_english(paper) and _has_abstract(paper):
+                    if _is_recent(paper, since):
                         batch.append(paper)
 
                 all_results.extend(batch)
