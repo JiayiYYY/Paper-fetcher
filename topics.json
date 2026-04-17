@@ -1,8 +1,6 @@
 {
   "_comment": "Semantic Scholar bulk search query syntax: + AND, | OR, - NOT, \"phrase\", * prefix, ~N fuzzy/proximity",
-
   "tier1_core": {
-
     "ai_fairness_decolonial": [
       "\"algorithmic bias\" | \"algorithm bias\" (gender | race | ethnicity)",
       "\"AI fairness\" (communication | media | representation)",
@@ -13,7 +11,6 @@
       "\"platform governance\" (inequalit* | marginaliz* | bias)",
       "datafication (marginaliz* | inequalit* | surveillance)"
     ],
-
     "sexual_behavior_youth": [
       "adolescent* (sexting | \"sexual behavior\" | \"sexual content\") media",
       "\"online sexual\" (risk* | solicitation | harassment) youth | adolescent*",
@@ -22,17 +19,15 @@
       "\"non-consensual\" (image* | sharing) youth | teen*",
       "\"digital sexual health\" | \"online sex education\" youth"
     ],
-
     "social_media_wellbeing": [
-      "\"social media\" (wellbeing | \"well-being\" | depression | anxiety) adolescent* | youth",
+      "\"social media\" (depression | anxiety | loneliness | wellbeing) (adolescent* | youth | teen*)",
       "\"screen time\" \"mental health\" (child* | adolescent* | youth)",
-      "\"social comparison\" (Instagram | TikTok | \"social media\") adolescent*",
-      "(passive | active) \"social media use\" wellbeing | \"well-being\"",
-      "\"digital self-control\" | \"social media addiction\" adolescent* | teen*",
-      "\"doomscrolling\" | \"problematic social media\" mental health",
-      "\"social media\" longitudinal (effect* | outcome*) adolescent*"
+      "\"social comparison\" (Instagram | TikTok | \"social media\") (adolescent* | teen*)",
+      "(\"passive use\" | \"active use\") \"social media\" (wellbeing | affect* | depression)",
+      "(\"social media addiction\" | \"problematic social media use\") adolescent*",
+      "\"social media\" longitudinal (wellbeing | depression | anxiety) adolescent*",
+      "(\"technoference\" | \"phubbing\" | \"doomscrolling\") (wellbeing | \"mental health\")"
     ],
-
     "gender_studies": [
       "\"gender representation\" media | \"gender stereotypes\" media",
       "feminist (media | communication) (analys* | research | theor*)",
@@ -42,49 +37,41 @@
       "masculinit* media (representation | portray*)",
       "intersectional* (gender | race) media"
     ],
-
     "entertainment_youth_media": [
-      "\"parasocial relationship*\" (youth | adolescent* | children)",
-      "\"video game*\" adolescent* (psycholog* | wellbeing | aggression | effect*)",
-      "(TikTok | \"short-form video\") adolescent* | youth",
-      "\"binge-watching\" adolescent* | teen* effect* | wellbeing",
-      "fandom identit* adolescent* | youth",
-      "\"streaming\" (Netflix | YouTube | platform) adolescent* wellbeing | use",
-      "\"media entertainment\" adolescent* identit* | development"
+      "\"parasocial\" (relationship* | interaction*) (youth | adolescent* | children | teen*)",
+      "\"video game\" (adolescent* | youth | children) (aggression | addiction | wellbeing)",
+      "(TikTok | \"short-form video\") (adolescent* | youth | teen*)",
+      "(\"binge-watching\" | \"binge watching\") (adolescent* | teen*) (effect* | wellbeing | sleep)",
+      "fandom (identit* | community | belonging) (adolescent* | youth)",
+      "(YouTube | influencer*) (adolescent* | youth | children) (effect* | parasocial | identit*)"
     ]
   },
-
   "tier2_interdisciplinary": {
     "_comment": "每组限 5 篇。聚焦真正跨学科交叉点。",
-
     "biology_crossover": [
       "\"differential susceptibility\" media (adolescent* | child*)",
       "(pubert* | hormonal*) media (effect* | susceptib* | use)",
       "neurobiolog* | neuroscience \"social media\" adolescent*",
       "genetic* temperament (media | screen) child* | adolescent*"
     ],
-
     "anthropology_crossover": [
       "\"digital ethnography\" (social media | platform | online)",
       "indigenous media (representation | voice | digital)",
       "\"cross-cultural\" media effect* | use adolescent*",
       "ritual* | practic* algorithm* | platform (culture | society)"
     ],
-
     "sociology_crossover": [
       "\"platform capitalism\" | \"surveillance capitalism\" (media | data | youth)",
       "\"digital inequality\" (socioeconomic | class | race) media",
       "\"structural inequality\" algorithm* | platform",
       "datafication (everyday | life | society)"
     ],
-
     "public_health_crossover": [
       "\"social media\" \"body image\" | \"eating disorder*\" intervention*",
       "\"screen time\" (sleep | physical health | obesity) child* | adolescent*",
       "\"health misinformation\" | \"health communication\" (social media | digital) youth",
       "\"problematic internet use\" adolescent* mental health"
     ],
-
     "political_psychology_crossover": [
       "\"political socialization\" (social media | digital) youth | adolescent*",
       "misinformation | disinformation (political | belief*) social media effect*",
@@ -94,7 +81,6 @@
       "conspir* theor* (social media | online) (belief* | spread*)"
     ]
   },
-
   "tier3_ascor_scholars": {
     "_comment": "ASCoR Youth & Media Entertainment 组学者",
     "scholars": [
@@ -118,7 +104,6 @@
       "Saurabh Khanna"
     ]
   },
-
   "tier4_global_scholars": {
     "_comment": "全球各领域知名学者",
     "ai_fairness_decolonial": [
@@ -153,7 +138,6 @@
       "Gaye Tuchman"
     ]
   },
-
   "tier5_journals": {
     "_comment": "按期刊直接搜索，venue 参数全量抓取，不限关键词。名称必须与 S2 数据库完全匹配。",
     "your_watchlist": [
