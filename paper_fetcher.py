@@ -673,6 +673,11 @@ def save_to_notion(papers: list, config: dict, dry_run: bool = False) -> None:
             skipped += 1
 
     print(f"[Notion] 已保存 {saved} 篇，跳过 {skipped} 篇")
+    notion.pages.create(parent={"database_id": db_id}, properties=props)
+            saved += 1
+            print(f"  [Notion ✓] saved: {p['title'][:60]}")
+            print(f"  [Notion ✓] db_id used: {db_id}")
+            time.sleep(0.35)
 
 # ─────────────────────────────────────────
 # 主程序
