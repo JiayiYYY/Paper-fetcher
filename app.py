@@ -356,7 +356,8 @@ Hit **▶ Run** to fetch papers, preview results here, then tick what you want a
             st.markdown(f"**{label}**")
             cols = st.columns(3)
             for i, j in enumerate(journals):
-                cols[i % 3].markdown(f"· {j}")
+                name = j["name"] if isinstance(j, dict) else j
+                cols[i % 3].markdown(f"· {name}")
             st.markdown("")
 
 st.divider()
