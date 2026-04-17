@@ -217,7 +217,7 @@ def build_config(s2_key, zotero_id, zotero_key, notion_tok, notion_db, collectio
     return cfg
 
 # ── Session state ─────────────────────────────────────────────────────────────
-for k, v in {"results": [], "saved_this": 0, "selected_keys": set(), "page": 1, "last_filtered_count": 0}.items():
+for k, v in {"results": [], "saved_this": 0, "selected_keys": set(), "page": 1, "last_filtered_count": 0, "prefill": False}.items():
     if k not in st.session_state:
         st.session_state[k] = v
 
@@ -226,8 +226,11 @@ with st.sidebar:
     st.markdown("## 🧇")
     st.divider()
 
-    # ── Host auto-fill ──
-    host_secrets = st.secrets.get("host", {}) if hasattr(st, "secrets") else {}
+    # Host auto-fill
+    try:
+        host_secrets = dict(st.secrets["host"]) if "host" in st.secrets else {}
+    except Exception:
+        host_secrets = {}
     is_host = bool(host_secrets)
 
     st.markdown("### API Keys")
@@ -236,11 +239,11 @@ with st.sidebar:
             st.session_state["prefill"] = True
 
     if st.session_state.get("prefill") and is_host:
-        s2_key     = st.text_input("Semantic Scholar API Key", value=host_secrets.get("s2_key",""),     type="password")
-        zotero_id  = st.text_input("Zotero Library ID",        value=host_secrets.get("zotero_id",""),  placeholder="e.g. 10541129")
-        zotero_key = st.text_input("Zotero API Key",           value=host_secrets.get("zotero_key",""), type="password")
-        notion_tok = st.text_input("Notion Token",             value=host_secrets.get("notion_tok",""), type="password")
-        notion_db  = st.text_input("Notion Database ID",       value=host_secrets.get("notion_db",""),  placeholder="32-char ID")
+        s2_key     = st.text_input("Semantic Scholar API Key", value=host_secrets.get("s2_key", ""),     type="password")
+        zotero_id  = st.text_input("Zotero Library ID",        value=host_secrets.get("zotero_id", ""),  placeholder="e.g. 10541129")
+        zotero_key = st.text_input("Zotero API Key",           value=host_secrets.get("zotero_key", ""), type="password")
+        notion_tok = st.text_input("Notion Token",             value=host_secrets.get("notion_tok", ""), type="password")
+        notion_db  = st.text_input("Notion Database ID",       value=host_secrets.get("notion_db", ""),  placeholder="32-char ID")
     else:
         s2_key     = st.text_input("Semantic Scholar API Key", type="password", placeholder="Enter key…")
         zotero_id  = st.text_input("Zotero Library ID",        placeholder="e.g. 10541129")
@@ -250,23 +253,16 @@ with st.sidebar:
 
     with st.expander("📁 Zotero Collection Keys (optional)"):
         st.markdown('<p style="font-size:0.75rem;color:#aaa;margin-bottom:0.5rem">8-char key from each collection URL. Leave blank to save to root library.</p>', unsafe_allow_html=True)
-        host_colls = {}
-        if hasattr(st, "secrets"):
-            try:
-                host_colls = dict(st.secrets["host_collections"])
-            except Exception:
-                host_colls = {}
+        try:
+            host_colls = dict(st.secrets["host_collections"]) if "host_collections" in st.secrets else {}
+        except Exception:
+            host_colls = {}
         collection_keys = {}
         for key, label in COLLECTION_KEY_LABELS.items():
             prefilled = host_colls.get(key, "") if st.session_state.get("prefill") else ""
-            collection_keys[key] = st.text_input(
-                label,
-                value=prefilled,
-                placeholder="e.g. ABC12345",
-                key=f"coll_{key}"
-            )
+            collection_keys[key] = st.text_input(label, value=prefilled, placeholder="e.g. ABC12345", key=f"coll_{key}")
+
     st.divider()
-    
     st.markdown("### Search Settings")
     mode = st.selectbox("Mode", ["all","search","authors","journals"],
         format_func=lambda x: {"all":"All (keywords + scholars + journals)",
