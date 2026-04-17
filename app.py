@@ -93,8 +93,6 @@ BASE_DIR    = Path(__file__).parent
 CONFIG_PATH = BASE_DIR / "config.json"
 TOPICS_PATH = BASE_DIR / "topics.json"
 SAVED_PATH  = BASE_DIR / "saved_dois.json"
-JOURNALS_PATH = BASE_DIR / "journals.json"
-
 
 TOPIC_LABELS = {
     "tier1:ai_fairness_decolonial":          "AI Fairness & Decolonial",
@@ -348,16 +346,16 @@ Hit **▶ Run** to fetch papers, preview results here, then tick what you want a
 
     # Journal list — as real Python code, NOT inside the markdown string
     with st.expander("📋 Journals we search (Tier 5)"):
-        journals_data = load_json_safe(JOURNALS_PATH) or {}
-        for group, journals in journals_data.items():
+        topics_data = load_json_safe(TOPICS_PATH) or {}
+        tier5 = topics_data.get("tier5_journals", {})
+        for group, journals in tier5.items():
             if group.startswith("_"):
                 continue
             label = JOURNAL_GROUPS.get(group, group)
             st.markdown(f"**{label}**")
             cols = st.columns(3)
             for i, j in enumerate(journals):
-                name = j["name"] if isinstance(j, dict) else j
-                cols[i % 3].markdown(f"· {name}")
+                cols[i % 3].markdown(f"· {j}")
             st.markdown("")
 
 st.divider()
@@ -421,7 +419,7 @@ if run_btn:
                 all_papers.extend(pf.run_authors(topics, since))
             if mode in ("journals", "all"):
                 log_lines.append("\n── Tier 5: Journal sweep ──"); update_log()
-                all_papers.extend(pf.run_journals(since))
+                all_papers.extend(pf.run_journals(topics, since))
             if mode == "all":
                 all_papers = pf.deduplicate(all_papers)
 
@@ -453,10 +451,7 @@ if run_btn:
             log_lines.append("\n✓ Done."); update_log()
 
     except Exception as e:
-        log_lines.append(f"\n[ERROR] {type(e).__name__}: {e}")
-        update_log()
-        import traceback
-        traceback.print_exc()
+        log_lines.append(f"\n[ERROR] {type(e).__name__}: {e}"); update_log()
     finally:
         builtins.print = original_print
 
@@ -595,12 +590,7 @@ if results:
         checked = pk in st.session_state["selected_keys"]
         col_chk, col_card = st.columns([0.04, 0.96])
         with col_chk:
-            new_val = st.checkbox(
-    "select paper",
-    value=checked,
-    key=f"chk_{pk[:60]}",
-    label_visibility="collapsed"
-)
+            new_val = st.checkbox("select", value=checked, key=f"chk_{pk[:60]}", label_visibility="hidden")
             if new_val:
                 st.session_state["selected_keys"].add(pk)
             else:
