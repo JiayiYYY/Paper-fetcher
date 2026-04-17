@@ -414,7 +414,7 @@ def run_journals(since: str) -> list:
         return []
 
     collected = []
-    print("\n[Tier 5] 期刊全量搜索")
+    print("\n[Tier 5] OpenAlex 期刊全量搜索")
 
     for group, journals in journal_cfg.items():
         if group.startswith("_"):
@@ -422,42 +422,87 @@ def run_journals(since: str) -> list:
         print(f"  {group}")
 
         for journal in journals:
-            base_params = {
-                "query": "",
-                "fields": PAPER_FIELDS,
-                "publicationTypes": "JournalArticle",
-                "publicationDateOrYear": f"{since}:",
-                "sort": "publicationDate:desc",
-                "venue": journal,
-            }
-
             all_results = []
-            params = base_params.copy()
+            page = 1
 
             while True:
-                data = _request("GET", S2_BULK_SEARCH, params=params)
-                if not data:
+                url = "https://api.openalex.org/works"
+                params = {
+                    "filter": f'primary_location.source.display_name:"{journal}",from_publication_date:{since},type:article',
+                    "per-page": 100,
+                    "page": page,
+                }
+
+                try:
+                    r = requests.get(url, params=params, timeout=20)
+                except requests.RequestException as e:
+                    print(f"    {journal[:50]}: 网络错误 {e}")
                     break
 
-                raw_batch = data.get("data", [])
-                batch = [
-                    p for p in raw_batch
-                    if _is_recent(p, since)
-                    and _is_english(p)
-                    and _has_abstract(p)
-                ]
+                if r.status_code != 200:
+                    print(f"    {journal[:50]}: HTTP {r.status_code}")
+                    break
+
+                data = r.json()
+                results = data.get("results", [])
+                if not results:
+                    break
+
+                batch = []
+                for p in results:
+                    abstract = ""
+                    inv = p.get("abstract_inverted_index")
+                    if inv:
+                        words = []
+                        for word, positions in inv.items():
+                            for pos in positions:
+                                words.append((pos, word))
+                        words.sort(key=lambda x: x[0])
+                        abstract = " ".join(word for _, word in words)
+
+                    authors = []
+                    for a in p.get("authorships", []):
+                        author_obj = a.get("author") or {}
+                        name = author_obj.get("display_name", "")
+                        if name:
+                            authors.append(name)
+
+                    doi = p.get("doi", "") or ""
+                    if doi.startswith("https://doi.org/"):
+                        doi = doi.replace("https://doi.org/", "", 1)
+
+                    source = (p.get("primary_location") or {}).get("source") or {}
+                    landing = (p.get("primary_location") or {}).get("landing_page_url", "") or ""
+                    pdf_url = (p.get("open_access") or {}).get("oa_url", "") or ""
+
+                    paper = {
+                        "title": p.get("title", "") or "Untitled",
+                        "authors": [{"name": name} for name in authors],
+                        "year": p.get("publication_year", ""),
+                        "publicationDate": p.get("publication_date", "") or "",
+                        "abstract": abstract,
+                        "venue": source.get("display_name", "") or journal,
+                        "externalIds": {"DOI": doi},
+                        "url": landing or pdf_url or p.get("id", ""),
+                        "openAccessPdf": {"url": pdf_url} if pdf_url else None,
+                        "publicationTypes": ["JournalArticle"],
+                    }
+
+                    if _is_recent(paper, since) and _is_english(paper) and _has_abstract(paper):
+                        batch.append(paper)
+
                 all_results.extend(batch)
+                print(f"    {journal[:50]}: page {page}, +{len(batch)}")
 
-                token = data.get("token")
-                if not token:
+                if len(results) < 100:
                     break
 
-                params = {**base_params, "token": token}
-                time.sleep(1.0)
+                page += 1
+                time.sleep(0.8)
 
             print(f"    {journal[:50]}: {len(all_results)} 篇")
             collected.extend(normalize(p, tag=f"tier5:{group}") for p in all_results)
-            time.sleep(1.0)
+            time.sleep(0.5)
 
     deduped = deduplicate(collected)
     print(f"\n[期刊] 去重后 {len(deduped)} 篇")
