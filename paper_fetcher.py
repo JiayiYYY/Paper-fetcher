@@ -17,6 +17,7 @@ paper_fetcher.py
     --target zotero / notion / both   保存目标（默认 both）
     --dry-run                         只打印，不保存
 """
+from __future__ import annotations
 
 import argparse
 import json
@@ -229,7 +230,7 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         if not data:
             break
 
-        batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]        
+        batch = [p for p in data.get("data", []) if _is_english(p)]
         results.extend(batch)
 
         # token 翻页（bulk search 的分页方式）
@@ -283,7 +284,8 @@ def get_papers_for_authors(author_ids: list[str], since: str, papers_per_author:
             time.sleep(1.2)
             continue
         papers = data.get("data", [])
-        recent = [p for p in papers if _is_recent(p, since) and _is_english(p) and _has_abstract(p)]        recent = sorted(recent, key=lambda p: p.get("publicationDate") or "", reverse=True)
+        recent = [p for p in papers if _is_recent(p, since) and _is_english(p)]
+        recent = sorted(recent, key=lambda p: p.get("publicationDate") or "", reverse=True)
         all_papers.extend(recent[:papers_per_author])
         time.sleep(1.2)
 
@@ -535,7 +537,7 @@ def save_to_zotero(papers: list, config: dict, dry_run: bool = False) -> None:
     coll_keys = cfg.get("collection_keys", {})
 
     # 按 topic 分组
-    topic_groups: dict[str, list] = {}
+    topic_groups: dict = {}
     for p in papers:
         topic = _get_topic_key(p["tag"])
         topic_groups.setdefault(topic, []).append(p)
