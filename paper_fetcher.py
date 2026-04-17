@@ -179,7 +179,7 @@ def deduplicate(papers):
 # ── S2 bulk search ────────────────────────────────────────────────────────────
 
 def search_bulk(query, since, max_results=100):
-      params = {
+    params = {
         "query":                 query,
         "fields":                PAPER_FIELDS,
         "publicationTypes":      "JournalArticle",
