@@ -261,7 +261,8 @@ with st.sidebar:
         for key, label in COLLECTION_KEY_LABELS.items():
             prefilled = host_colls.get(key, "") if st.session_state.get("prefill") else ""
             collection_keys[key] = st.text_input(label, value=prefilled, placeholder="e.g. ABC12345", key=f"coll_{key}")
-        st.write(dict(host_colls))
+        st.write("host_colls keys:", list(host_colls.keys())[:3])
+        st.write("COLLECTION_KEY_LABELS keys:", list(COLLECTION_KEY_LABELS.keys())[:3])
     st.divider()
     st.markdown("### Search Settings")
     mode = st.selectbox("Mode", ["all","search","authors","journals"],
