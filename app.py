@@ -349,8 +349,7 @@ Hit **▶ Run** to fetch papers, preview results here, then tick what you want a
     # Journal list — as real Python code, NOT inside the markdown string
     with st.expander("📋 Journals we search (Tier 5)"):
         journals_data = load_json_safe(JOURNALS_PATH) or {}
-        tier5 = journals_data
-        for group, journals in tier5.items():
+        for group, journals in journals_data.items():
             if group.startswith("_"):
                 continue
             label = JOURNAL_GROUPS.get(group, group)
