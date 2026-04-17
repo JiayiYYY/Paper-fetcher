@@ -215,13 +215,12 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
       - 排除：-keyword
     """
     params = {
-        "query":               "",
-        "fields":              PAPER_FIELDS,
-        "publicationTypes":    "JournalArticle",        # 只要期刊文章
-        "publicationDateOrYear": f"{since}:",           # 从 since 至今
-        "sort":                "publicationDate:desc",  # 最新的排前面
-        "fieldsOfStudy":       "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
-        "venue":               journal,
+        "query":                 query,
+        "fields":                PAPER_FIELDS,
+        "publicationTypes":      "JournalArticle",
+        "publicationDateOrYear": f"{since}:",
+        "sort":                  "publicationDate:desc",
+        "fieldsOfStudy":         "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
     }
 
     results = []
@@ -235,13 +234,11 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
         results.extend(batch)
 
-        # token 翻页（bulk search 的分页方式）
         token = data.get("token")
         if not token or len(results) >= max_results:
             break
 
-        # 翻下一页：只传 token，其他参数沿用
-        params = {"token": token, "fields": PAPER_FIELDS}
+        params = {**params, "token": token}
         time.sleep(1.2)
 
     return results[:max_results]
@@ -422,8 +419,12 @@ def run_authors(topics: dict, since: str) -> list:
 def run_journals(topics: dict, since: str) -> list:
     """
     Tier 5 期刊搜索。
-    venue 作为独立参数，query 用通配符 * 不限关键词。
-    全量抓取时间段内所有文章，自动翻页。
+    从 topics.json 的 tier5_journals 读取期刊分组。
+    不走关键词逻辑，不加 fieldsOfStudy，只保留：
+      - JournalArticle
+      - 时间范围
+      - 英语
+      - 有摘要
     """
     tier5 = topics.get("tier5_journals", {})
     if not tier5:
@@ -439,7 +440,7 @@ def run_journals(topics: dict, since: str) -> list:
 
         for journal in journals:
             base_params = {
-                "query":                 "*",
+                "query":                 "",
                 "fields":                PAPER_FIELDS,
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
@@ -454,12 +455,20 @@ def run_journals(topics: dict, since: str) -> list:
                 data = _request("GET", S2_BULK_SEARCH, params=params)
                 if not data:
                     break
-                batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
+
+                raw_batch = data.get("data", [])
+                batch = [
+                    p for p in raw_batch
+                    if _is_recent(p, since)
+                    and _is_english(p)
+                    and _has_abstract(p)
+                ]
                 all_results.extend(batch)
+
                 token = data.get("token")
                 if not token:
                     break
-                # Keep base params, only add token for next page
+
                 params = {**base_params, "token": token}
                 time.sleep(1.0)
 
