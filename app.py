@@ -234,7 +234,7 @@ with st.sidebar:
     if is_host:
         if st.button("⚡ Fill my credentials"):
             st.session_state["prefill"] = True
-            for k, v in {"results": [], "saved_this": 0, "selected_keys": set(), "page": 1, "last_filtered_count": 0, "prefill": False}.items():
+        for k, v in {"results": [], "saved_this": 0, "selected_keys": set(), "page": 1, "last_filtered_count": 0, "prefill": False}.items():
 
     if st.session_state.get("prefill") and is_host:
         s2_key     = st.text_input("Semantic Scholar API Key", value=host_secrets.get("s2_key",""),     type="password")
