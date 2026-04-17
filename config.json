@@ -1,24 +1,14 @@
 {
- "semantic_scholar": {
-    "api_key": ""
- },
-
-  "zotero": {
-    "_comment_library_id": "Find this at zotero.org/settings/keys — shown as 'Your userID for use in API calls'",
-    "library_id": "",
-
-    "_comment_api_key": "Generate at zotero.org/settings/keys → Create new private key",
-    "api_key": "",
-
-    "_comment_library_type": "'user' for personal library, 'group' for group library",
-    "library_type": "user",
+  "semantic_scholar": {
+    "api_key": "your_key_here"
   },
-
+  "zotero": {
+    "library_id": "your_library_id",
+    "api_key": "your_api_key",
+    "library_type": "user"
+  },
   "notion": {
-    "_comment_token": "Create an Integration at notion.so/my-integrations → copy 'Internal Integration Token'",
-    "token": "",
-
-    "_comment_database_id": "Open your Notion database → copy the ID from the URL (32-char hex string)",
-    "database_id": ""
+    "token": "your_token",
+    "database_id": "your_database_id"
   }
 }
