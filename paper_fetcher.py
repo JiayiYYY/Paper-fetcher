@@ -423,42 +423,45 @@ def run_journals(since: str) -> list:
 
         for journal in journals:
             base_params = {
-                "query":                 "",
-                "fields":                PAPER_FIELDS,
-                "publicationTypes":      "JournalArticle",
+                "query": "",
+                "fields": PAPER_FIELDS,
+                "publicationTypes": "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
-                "sort":                  "publicationDate:desc",
-                "venue":                 journal,
+                "sort": "publicationDate:desc",
+                "venue": journal,
             }
 
             all_results = []
-    params = base_params.copy()
-    raw_total = 0
+            params = base_params.copy()
 
-    while True:
-        data = _request("GET", S2_BULK_SEARCH, params=params)
-        if not data:
-            break
+            while True:
+                data = _request("GET", S2_BULK_SEARCH, params=params)
+                if not data:
+                    break
 
-        raw_batch = data.get("data", [])
-        raw_total += len(raw_batch)
+                raw_batch = data.get("data", [])
+                batch = [
+                    p for p in raw_batch
+                    if _is_recent(p, since)
+                    and _is_english(p)
+                    and _has_abstract(p)
+                ]
+                all_results.extend(batch)
 
-        batch = [
-            p for p in raw_batch
-            if _is_recent(p, since)
-            and _is_english(p)
-            and _has_abstract(p)
-        ]
-        all_results.extend(batch)
+                token = data.get("token")
+                if not token:
+                    break
 
-        token = data.get("token")
-        if not token:
-            break
+                params = {**base_params, "token": token}
+                time.sleep(1.0)
 
-        params = {**base_params, "token": token}
-        time.sleep(1.0)
+            print(f"    {journal[:50]}: {len(all_results)} 篇")
+            collected.extend(normalize(p, tag=f"tier5:{group}") for p in all_results)
+            time.sleep(1.0)
 
-    print(f"    {journal[:50]}: raw={raw_total}, kept={len(all_results)}")
+    deduped = deduplicate(collected)
+    print(f"\n[期刊] 去重后 {len(deduped)} 篇")
+    return deduped
 
 # ─────────────────────────────────────────
 # Tier 解析工具
