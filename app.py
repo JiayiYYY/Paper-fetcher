@@ -453,9 +453,10 @@ if run_btn:
             log_lines.append("\n✓ Done."); update_log()
 
     except Exception as e:
-        log_lines.append(f"\n[ERROR] {e}"); update_log()
+        log_lines.append(f"\n[ERROR] {type(e).__name__}: {e}")
+        update_log()
         import traceback
-        log_lines.append(traceback.format_exc()); update_log()
+        traceback.print_exc()
     finally:
         builtins.print = original_print
 
