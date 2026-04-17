@@ -192,38 +192,38 @@
   },
 
   "tier5_journals": {
-    "_comment": "按期刊直接搜索，使用 Semantic Scholar venue 参数。每本期刊取最新论文。",
+    "_comment": "按期刊直接搜索，使用 Semantic Scholar venue 参数。名称必须与 S2 数据库完全匹配。",
     "your_watchlist": [
       "Computers in Human Behavior",
       "Media Psychology",
       "Communication Monographs",
       "Feminist Media Studies",
-      "Information Communication and Society",
+      "Information, Communication & Society",
       "Journal of Children and Media",
       "Journal of Communication",
       "Human Communication Research"
     ],
     "high_impact_comm": [
-      "New Media and Society",
+      "New Media & Society",
       "Journal of Computer-Mediated Communication",
       "Communication Research",
       "Mass Communication and Society",
-      "Social Media and Society",
+      "Social Media + Society",
       "Political Communication",
-      "Journalism and Mass Communication Quarterly",
+      "Journalism & Mass Communication Quarterly",
       "Communication Theory"
     ],
     "psychology_adjacent": [
       "Psychology of Popular Media",
-      "Cyberpsychology Behavior and Social Networking",
+      "Cyberpsychology, Behavior, and Social Networking",
       "Journal of Media Psychology",
-      "Technology Mind and Behavior",
+      "Technology, Mind, and Behavior",
       "Developmental Psychology",
       "Journal of Youth and Adolescence",
       "Journal of Adolescence"
     ],
     "gender_feminist": [
-      "Gender and Society",
+      "Gender & Society",
       "Sex Roles",
       "Psychology of Women Quarterly",
       "Women's Studies in Communication"
@@ -231,9 +231,7 @@
     "interdisciplinary_high_impact": [
       "Nature Human Behaviour",
       "Perspectives on Psychological Science",
-      "Psychological Science",
-      "PNAS",
-      "Science Advances"
+      "Psychological Science"
     ]
   }
 }
