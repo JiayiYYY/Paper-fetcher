@@ -666,7 +666,10 @@ def save_to_notion(papers: list, config: dict, dry_run: bool = False) -> None:
             saved += 1
             time.sleep(0.35)
         except Exception as e:
-            print(f"  [Notion 警告] '{p['title'][:50]}' 失败：{e}")
+            import traceback
+            print(f"  [Notion 失败] '{p['title'][:50]}'")
+            print(f"  {type(e).__name__}: {e}")
+            print(traceback.format_exc())
             skipped += 1
 
     print(f"[Notion] 已保存 {saved} 篇，跳过 {skipped} 篇")
