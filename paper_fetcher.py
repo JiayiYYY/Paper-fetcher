@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import time
 from collections import Counter
@@ -205,6 +206,51 @@ def _has_abstract(paper: dict) -> bool:
     abstract = paper.get("abstract") or ""
     return len(abstract.strip()) > 100
 
+def _norm_venue(s: str) -> str:
+    s = (s or "").lower().strip()
+    s = s.replace("&", " and ").replace("+", " and ")
+    s = re.sub(r"[^\w\s]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _canonical_api_variants(journal: str) -> list[str]:
+    """
+    生成更容易命中 Semantic Scholar API 的期刊名变体。
+    优先使用原始显示名，同时尝试 and/去标点 版本。
+    """
+    variants = []
+
+    def add(x: str):
+        x = re.sub(r"\s+", " ", (x or "")).strip()
+        if x and x not in variants:
+            variants.append(x)
+
+    add(journal)
+    add(journal.replace("&", "and"))
+    add(journal.replace("+", "and"))
+    add(journal.replace("&", "and").replace("+", "and"))
+    add(journal.replace(",", ""))
+    add(journal.replace(":", ""))
+    add(journal.replace(",", "").replace(":", ""))
+    add(journal.replace("&", "and").replace(",", ""))
+    add(journal.replace("+", "and").replace(",", ""))
+    return variants
+
+
+def load_journals() -> dict:
+    """
+    读取 journals.json，作为 Tier 5 唯一来源。
+    期望结构与 app.py / collection 映射一致：
+      {
+        "your_watchlist": [...],
+        "high_impact_comm": [...],
+        ...
+      }
+    """
+    data = load_json(JOURNALS_PATH)
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
 
 def search_bulk(query: str, since: str, max_results: int = 100) -> list:
     """
@@ -215,12 +261,13 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
       - 排除：-keyword
     """
     params = {
-        "query":                 query,
-        "fields":                PAPER_FIELDS,
-        "publicationTypes":      "JournalArticle",
-        "publicationDateOrYear": f"{since}:",
-        "sort":                  "publicationDate:desc",
-        "fieldsOfStudy":         "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
+        "query":               "",
+        "fields":              PAPER_FIELDS,
+        "publicationTypes":    "JournalArticle",        # 只要期刊文章
+        "publicationDateOrYear": f"{since}:",           # 从 since 至今
+        "sort":                "publicationDate:desc",  # 最新的排前面
+        "fieldsOfStudy":       "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
+        "venue":               journal,
     }
 
     results = []
@@ -234,11 +281,13 @@ def search_bulk(query: str, since: str, max_results: int = 100) -> list:
         batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
         results.extend(batch)
 
+        # token 翻页（bulk search 的分页方式）
         token = data.get("token")
         if not token or len(results) >= max_results:
             break
 
-        params = {**params, "token": token}
+        # 翻下一页：只传 token，其他参数沿用
+        params = {"token": token, "fields": PAPER_FIELDS}
         time.sleep(1.2)
 
     return results[:max_results]
@@ -419,12 +468,8 @@ def run_authors(topics: dict, since: str) -> list:
 def run_journals(topics: dict, since: str) -> list:
     """
     Tier 5 期刊搜索。
-    从 topics.json 的 tier5_journals 读取期刊分组。
-    不走关键词逻辑，不加 fieldsOfStudy，只保留：
-      - JournalArticle
-      - 时间范围
-      - 英语
-      - 有摘要
+    venue 作为独立参数，query 用通配符 * 不限关键词。
+    全量抓取时间段内所有文章，自动翻页。
     """
     tier5 = topics.get("tier5_journals", {})
     if not tier5:
@@ -440,7 +485,7 @@ def run_journals(topics: dict, since: str) -> list:
 
         for journal in journals:
             base_params = {
-                "query":                 "",
+                "query":                 "*",
                 "fields":                PAPER_FIELDS,
                 "publicationTypes":      "JournalArticle",
                 "publicationDateOrYear": f"{since}:",
@@ -455,20 +500,12 @@ def run_journals(topics: dict, since: str) -> list:
                 data = _request("GET", S2_BULK_SEARCH, params=params)
                 if not data:
                     break
-
-                raw_batch = data.get("data", [])
-                batch = [
-                    p for p in raw_batch
-                    if _is_recent(p, since)
-                    and _is_english(p)
-                    and _has_abstract(p)
-                ]
+                batch = [p for p in data.get("data", []) if _is_english(p) and _has_abstract(p)]
                 all_results.extend(batch)
-
                 token = data.get("token")
                 if not token:
                     break
-
+                # Keep base params, only add token for next page
                 params = {**base_params, "token": token}
                 time.sleep(1.0)
 
