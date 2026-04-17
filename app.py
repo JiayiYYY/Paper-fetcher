@@ -237,13 +237,21 @@ with st.sidebar:
     if is_host:
         if st.button("⚡ Fill my credentials"):
             st.session_state["prefill"] = True
+            # Write all values directly into session state
+            st.session_state["s2_key_input"]     = host_secrets.get("s2_key", "")
+            st.session_state["zotero_id_input"]  = host_secrets.get("zotero_id", "")
+            st.session_state["zotero_key_input"] = host_secrets.get("zotero_key", "")
+            st.session_state["notion_tok_input"] = host_secrets.get("notion_tok", "")
+            st.session_state["notion_db_input"]  = host_secrets.get("notion_db", "")
+            for k in COLLECTION_KEY_LABELS:
+                st.session_state[f"coll_{k}"] = host_colls.get(k, "")
 
     if st.session_state.get("prefill") and is_host:
-        s2_key     = st.text_input("Semantic Scholar API Key", value=host_secrets.get("s2_key", ""),     type="password")
-        zotero_id  = st.text_input("Zotero Library ID",        value=host_secrets.get("zotero_id", ""),  placeholder="e.g. 10541129")
-        zotero_key = st.text_input("Zotero API Key",           value=host_secrets.get("zotero_key", ""), type="password")
-        notion_tok = st.text_input("Notion Token",             value=host_secrets.get("notion_tok", ""), type="password")
-        notion_db  = st.text_input("Notion Database ID",       value=host_secrets.get("notion_db", ""),  placeholder="32-char ID")
+        s2_key     = st.text_input("Semantic Scholar API Key", type="password",                    key="s2_key_input",     placeholder="Enter key…")
+        zotero_id  = st.text_input("Zotero Library ID",                                            key="zotero_id_input",  placeholder="e.g. 10541129")
+        zotero_key = st.text_input("Zotero API Key",           type="password",                    key="zotero_key_input")
+        notion_tok = st.text_input("Notion Token",             type="password",                    key="notion_tok_input", placeholder="secret_…")
+        notion_db  = st.text_input("Notion Database ID",                                           key="notion_db_input",  placeholder="32-char ID")
     else:
         s2_key     = st.text_input("Semantic Scholar API Key", type="password", placeholder="Enter key…")
         zotero_id  = st.text_input("Zotero Library ID",        placeholder="e.g. 10541129")
