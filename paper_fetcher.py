@@ -179,14 +179,13 @@ def deduplicate(papers):
 # ── S2 bulk search ────────────────────────────────────────────────────────────
 
 def search_bulk(query, since, max_results=100):
-    params = {
+      params = {
         "query":                 query,
         "fields":                PAPER_FIELDS,
         "publicationTypes":      "JournalArticle",
         "publicationDateOrYear": f"{since}:",
         "sort":                  "publicationDate:desc",
-        "fieldsOfStudy":         "Social Sciences,Psychology",
-        "minCitationCount":      "1",
+        "fieldsOfStudy":         "Sociology,Psychology,Art,History,Political Science,Education,Linguistics,Law,Agricultural and Food Sciences",
     }
     results = []
     while len(results) < max_results:
